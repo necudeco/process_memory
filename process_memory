@@ -1,0 +1,26 @@
+#!/bin/bash
+
+if [ -z $LIMIT ]; then
+	LIMIT=$((100*1024))
+fi
+
+COMMANDS=$(ps -axo comm | sort | uniq)
+
+for CMD in $COMMANDS; do
+
+declare -i VALUE
+#rss
+#vsz
+VALUE=$(ps -C $CMD --no-headers  -o rss | paste -sd+ | bc)
+
+
+
+
+if [ $VALUE -gt $LIMIT ]
+then
+	VALUE2=$(($VALUE/(1024)));
+	echo "$CMD $VALUE2 MB"
+fi
+
+done
+
